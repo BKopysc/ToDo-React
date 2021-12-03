@@ -27,20 +27,18 @@ export default class App extends React.Component {
   };
 
   onMoveToToDo = (elem, idx) => {
-    this.state.toDoArray.push(elem);
-    this.state.doneArray.pop(elem);
+    //this.state.toDoArray.push(elem);
     this.setState({
-      doneArray: this.state.doneArray, //this.state.doneArray.filter((item, id) => id !== idx),
-      toDoArray: this.state.toDoArray
+      doneArray: this.state.doneArray.filter((item, id) => id !== idx),
+      toDoArray: this.state.toDoArray.concat(elem)
     });
   };
 
   onMoveToDone = (elem, idx) => {
-    this.state.doneArray.push(elem);
-    this.state.toDoArray.pop(elem);
+    //this.state.doneArray.push(elem);
     this.setState({
-      doneArray: this.state.doneArray, //[...this.state.doneArray, elem],
-      toDoArray: this.state.toDoArray //this.state.toDoArray.filter((item, id) => id !== idx)
+      doneArray: this.state.doneArray.concat(elem), //[...this.state.doneArray, elem],
+      toDoArray: this.state.toDoArray.filter((item, id) => id !== idx)
     });
   };
 
