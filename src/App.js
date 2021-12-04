@@ -2,43 +2,51 @@ import { render } from "react-dom";
 //import "./styles.css";
 import React from "react";
 import AppHeader from "./components/header";
-import ToDoList from "./components/toDoList";
-import ToDoInput from "./components/toDoInput";
-import DoneList from "./components/doneList";
+import TaskList from "./components/TaskList";
+import ToDoInput from "./components/ToDoInput";
+import { nanoid } from "nanoid"; //generowanie id
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      //toDoArray: ["Make a cofee", "Eat pizza"],
-      toDoArray: ["Make a cofee", "Eat pizza"],
-      doneArray: ["Learn React"]
+      toDoArray: [
+        { id: nanoid(), text: "Make a cofee" },
+        { id: nanoid(), text: "Eat pizza" }
+      ],
+      doneArray: [{ id: nanoid(), text: "Learn React" }]
     };
   }
+
+  createNewToDo = (todoText) => ({
+    id: nanoid(),
+    text: todoText
+  });
 
   onAddTask = (evt) => {
     if (evt.key === "Enter") {
       console.log(evt.target.value);
       this.setState({
-        toDoArray: [...this.state.toDoArray, evt.target.value]
+        toDoArray: [
+          ...this.state.toDoArray,
+          this.createNewToDo(evt.target.value)
+        ]
       });
       evt.target.value = "";
     }
   };
 
-  onMoveToToDo = (elem, idx) => {
-    //this.state.toDoArray.push(elem);
+  onMoveToToDo = (item) => {
     this.setState({
-      doneArray: this.state.doneArray.filter((item, id) => id !== idx),
-      toDoArray: this.state.toDoArray.concat(elem)
+      doneArray: this.state.doneArray.filter((i) => i.id !== item.id),
+      toDoArray: [...this.state.toDoArray, item] //this.state.toDoArray.concat(item)
     });
   };
 
-  onMoveToDone = (elem, idx) => {
-    //this.state.doneArray.push(elem);
+  onMoveToDone = (item) => {
     this.setState({
-      doneArray: this.state.doneArray.concat(elem), //[...this.state.doneArray, elem],
-      toDoArray: this.state.toDoArray.filter((item, id) => id !== idx)
+      doneArray: [...this.state.doneArray, item],
+      toDoArray: this.state.toDoArray.filter((i) => i.id !== item.id)
     });
   };
 
@@ -47,13 +55,19 @@ export default class App extends React.Component {
       <div className="App">
         <AppHeader />
         <ToDoInput onAddTask={this.onAddTask} />
-        <ToDoList
-          toDoList={this.state.toDoArray}
-          onMoveToDone={this.onMoveToDone}
+        <TaskList
+          name="toDoList"
+          title="To do:"
+          isChecked=""
+          itemList={this.state.toDoArray}
+          onMoveToAnotherList={this.onMoveToDone}
         />
-        <DoneList
-          doneList={this.state.doneArray}
-          onMoveToToDo={this.onMoveToToDo}
+        <TaskList
+          name="doneList"
+          title="Done:"
+          isChecked="yes"
+          itemList={this.state.doneArray}
+          onMoveToAnotherList={this.onMoveToToDo}
         />
       </div>
     );
