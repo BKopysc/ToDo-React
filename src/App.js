@@ -11,8 +11,8 @@ export default class App extends React.Component {
     super(props);
     this.state = {
       toDoArray: [
-        { id: nanoid(), text: "Make a cofee" },
-        { id: nanoid(), text: "Eat pizza" }
+        { id: nanoid(), text: "Make a coffee" },
+        { id: nanoid(), text: "Do homework" }
       ],
       doneArray: [{ id: nanoid(), text: "Learn React" }]
     };
@@ -23,6 +23,7 @@ export default class App extends React.Component {
     text: todoText
   });
 
+  //Nie jestem pewien, czy to jest poprawne dodawanie do listy
   onAddTask = (evt) => {
     if (evt.key === "Enter") {
       console.log(evt.target.value);
